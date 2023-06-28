@@ -1,9 +1,93 @@
-<div class="container" style="margin: 100px auto;">
-    <div class="row">
-        <div class="col">
+<!DOCTYPE html>
+<html>
 
-            <h2>Hola {{persona}}</h2>
-            <a href="/admin/login/logout" class="btn btn-danger">Cerrar Sesion<i class="fas fa-sign-out-alt"></i></a>
-        </div>
-    |</div>
-</div>
+<head>
+  <title>Tabla Dinámica</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <style>
+    body {
+      padding: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="row">
+    <div class="col-11" style="margin-top:-9px ;">
+      <h2>LISTADO DE NOVEDADES</h2>
+    </div>
+    <div class="col-1 text-right">
+      <a href="" class="btn btn-success"><i class="fas fa-plus"></i>Nuevo</a>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <h2>LISTADO DE NOVEDADES</h2>
+    <table id="myTable" class="table">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>Titulo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each novedades}}
+        <tr>
+          <td>{{id}}</td>
+          <td>{{titulo}}</td>
+          <td>
+            <a href="../admin/novedades/modificar/{{id}}"><button class="btn btn-primary" onclick="editarFila(this)">Editar</button></a>
+           <a href="../admin/novedades/eliminar/{{id}}"><button class="btn btn-danger" onclick="eliminarFila(this)">Eliminar</button></a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <a href="../admin/novedades/agregar"><button class="btn btn-success" onclick="agregarFila()">Agregar Fila</button></a>
+  </div>
+
+  <script>
+    function agregarFila() {
+      var table = document.getElementById("myTable");
+      var newRow = table.insertRow();
+      var cell1 = newRow.insertCell(0);
+      var cell2 = newRow.insertCell(1);
+      var cell3 = newRow.insertCell(2);
+      cell1.innerHTML = "<input type='text'>";
+      cell2.innerHTML = "<input type='text'>";
+      cell3.innerHTML = "<button class='btn btn-primary' onclick='editarFila(this)'>Editar</button> <button class='btn btn-danger' onclick='eliminarFila(this)'>Eliminar</button>";
+    }
+
+    function editarFila(button) {
+      var row = button.parentNode.parentNode;
+      var cells = row.getElementsByTagName("td");
+      var nombre = cells[0].innerHTML;
+      var apellido = cells[1].innerHTML;
+      cells[0].innerHTML = "<input type='text' value='" + nombre + "'>";
+      cells[1].innerHTML = "<input type='text' value='" + apellido + "'>";
+      cells[2].innerHTML = "<button class='btn btn-success' onclick='guardarFila(this)'>Guardar</button>";
+    }
+
+    function guardarFila(button) {
+      var row = button.parentNode.parentNode;
+      var cells = row.getElementsByTagName("td");
+      var nombreInput = cells[0].getElementsByTagName("input")[0];
+      var apellidoInput = cells[1].getElementsByTagName("input")[0];
+      var nombre = nombreInput.value;
+      var apellido = apellidoInput.value;
+      cells[0].innerHTML = nombre;
+      cells[1].innerHTML = apellido;
+      cells[2].innerHTML = "<button class='btn btn-primary' onclick='editarFila(this)'>Editar</button> <button class='btn btn-danger' onclick='eliminarFila(this)'>Eliminar</button>";
+    }
+
+    function eliminarFila(button) {
+      var row = button.parentNode.parentNode;
+      row.parentNode.removeChild(row);
+    }
+  </script>
+</body>
+
+</html>
